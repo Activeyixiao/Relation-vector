@@ -6,31 +6,31 @@ A Working Example:
 
 # 1.
 
-Getting words pairs from conceptnet and count the time of its occurrence in the text corpus and then return the frequency of the words pairs.
+Getting words pairs from conceptnet and count the time of its occurrence in the text corpus and then return the frequency of the words pairs in corpus.
 
 python3 preprocess_wp/wp_from_corpus.py -c corpus/corpus.txt -b build_folder -win 10 -sw language_tool/english_stopwords.txt -kg KG/en_words_pair.csv
 
 # 2.
 
-After select the words pairs with high frequency,the contexts of the words pairs are extracted in the text corpus.
+After selecting the words pairs with high frequency,the contexts of the words pairs are extracted from the text corpus.
 
 python3 preprocess_wp/wp_get_context.py -p build_folder/wp_freq_count.txt -b build_folder -mw 5 -sw 5
 
 # 3.
 
-convert context into concatenation of word embeddings
+After converting context into concatenation of word embeddings, each word pair is represented by its 1800 dimensional context vector. 
 
 python3 preprocess_wp/vectorize.py -wv word_embedding/GoogleNews-vectors-negative300.bin -p build_folder/wp_freq_count.txt -b build_folder
 
 # 4.
 
-Encoding the words pairs in conceptnet as the 38 dimensional one-hot-representation which stipulate the occurance or absence of each relation type. 
+Encoding the words pairs in conceptnet as the 38 dimensional one-hot-representation which stipulate the occurance or absence of each relation type. Then concatenate this 38d one-hot vector with 1800d context vector  
 
 python3 preprocess_wp/vectors_concatenation.py -r build_folder/relation_vector_pretrained.vec -kg KG/en_words_pair.csv -b build_folder
 
 # 5.
 
-splitting the words_pair into train set and test sets based on knowledge graph partition
+splitting the words_pair into train set and test sets based on knowledge graph partition (to avoid overlap of word in train and test sets)
 
 python3 preprocess_wp/data_separation.py -r build_folder/relation_vectors_1838d.vec -b experiment_data
 
